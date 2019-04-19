@@ -25,13 +25,12 @@ function concertThis() {
             console.log(response)
             var artistResults = response.data;
             for (var i = 0; i < artistResults.length; i++) {
-                var time = response.datetime
-                var momentTime = moment(time).format("dddd, MMMM Do YYYY, h:mm:ss a");
+                var time = moment(artistResults[i].datetime).format("dddd, MMMM Do YYYY, h:mm:ss a");
                 console.log(`
                 --------------
                 Venue: ${artistResults[i].venue.name}
                 City: ${artistResults[i].venue.city}
-                Time: ${momentTime}
+                Time: ${time}
                 --------------`)
             }
         })
