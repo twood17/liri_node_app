@@ -1,14 +1,14 @@
-
 require("dotenv").config();
 
+
+
 // Loading programs used in the apps. 
-var Keys = require("./keys")
+var keys = require("./keys")
 var axios = require('axios')
 var fs = require('fs')
 var moment = require('moment')
 var Spotify = require('node-spotify-api')
-
-// var spotify = new Spotify(keys.spotify)
+var spotify = new Spotify(keys.spotify)
 
 
 // This function will search the Bands-In-Town API, and 
@@ -65,12 +65,52 @@ function movieThis(movie) {
             ---------------`)
         });
 }
+function spotifySong(song) {
+    if (process.argv[2] !== "do-what-it-says" && process.argv[3] === undefined) {
+      song = "'The Sign' Ace of Base";
+    } else if (process.argv[2] === "do-what-it-says"){
+      song;
+    } else {
+      song = process.argv.slice(3).join(" ");
+    }
+    
+    spotify.search({ type: "track", query: song })
+      .then(function(response) {
+        console.log(`
+        ------------------
+        Artist Name: ${response.tracks.items[0].album.artists[0].name}
+        Song Name: ${response.tracks.items[0].artists.song}
+        Album Name: ${response.tracks.items[0].album.name}
+        Song Preview: ${response.tracks.items[0].external_urls.spotify}
+        ------------------
+        `);
+      })
+      .catch(function(err) {
+        console.log(err);
+      });
+  }
+
+  function doWhatItSays() {
+    fs.readFile("random.txt", "utf8", function(error, data) {
+      if (error) {
+        return console.log(error);
+      }      
+      var test = data.split(",");      
+      if (test.length === 2) {
+        runThis(test[0], test[1]);
+      } 
+    });
+  }
 
 function runThis(input, data) {
     if (input === "concert-this") {
         concertThis(data);
     } else if (input === "movie-this"){
         movieThis(data)
+    } else if (input === "spotify-this-song") {
+        spotifySong(data)
+    } else if (input === "do-what-it-says"){
+        doWhatItSays();
     }
 };
 
