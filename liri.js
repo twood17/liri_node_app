@@ -52,6 +52,7 @@ function movieThis(movie) {
 
     axios.get(queryURL)
         .then(function (response) {
+          
             console.log(`
             ---------------
             Title: ${response.data.Title}
@@ -79,7 +80,7 @@ function spotifySong(song) {
         console.log(`
         ------------------
         Artist Name: ${response.tracks.items[0].album.artists[0].name}
-        Song Name: ${response.tracks.items[0].artists.song}
+        Song Name: ${response.tracks.items[0].name}
         Album Name: ${response.tracks.items[0].album.name}
         Song Preview: ${response.tracks.items[0].external_urls.spotify}
         ------------------
